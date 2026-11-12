@@ -1,0 +1,22 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: sfrs-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python download_models.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: MONGO_URL          # MongoDB Atlas connection string (mongodb+srv://...)
+        sync: false
+      - key: MONGO_DB
+        value: sfrs
+      - key: ADMIN_PASSWORD     # password for the dashboard login
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS       # your Vercel URL, e.g. https://sfrs-frontend.vercel.app
+        sync: false
