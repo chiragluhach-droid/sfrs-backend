@@ -24,7 +24,7 @@ AUTH_ENABLED = bool(ADMIN_PASSWORD)
 
 PUBLIC_PATHS = {"/api/health", "/api/login", "/docs", "/openapi.json", "/"}
 
-if not AUTH_ENABLED and (os.getenv("RENDER") or os.getenv("RAILWAY_ENVIRONMENT")):
+if not AUTH_ENABLED and any(os.getenv(k) for k in ("RENDER", "RAILWAY_ENVIRONMENT", "RAILWAY_ENVIRONMENT_NAME", "RAILWAY_PROJECT_ID")):
     raise RuntimeError("ADMIN_PASSWORD must be set when deployed. Refusing to start an open API.")
 
 
